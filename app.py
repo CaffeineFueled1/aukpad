@@ -11,7 +11,7 @@ application = app  # alias if you prefer "application"
 # Environment variables
 USE_VALKEY = os.getenv("USE_VALKEY", "false").lower() == "true"
 VALKEY_URL = os.getenv("VALKEY_URL", "redis://localhost:6379/0")
-MAX_TEXT_SIZE = int(os.getenv("MAX_TEXT_SIZE", "1048576"))  # 1MB default
+MAX_TEXT_SIZE = int(os.getenv("MAX_TEXT_SIZE", "5")) * 1024 * 1024  # 5MB default
 MAX_CONNECTIONS_PER_IP = int(os.getenv("MAX_CONNECTIONS_PER_IP", "10"))
 RETENTION_HOURS = int(os.getenv("RETENTION_HOURS", "48"))  # Default 48 hours
 

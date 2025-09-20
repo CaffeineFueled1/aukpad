@@ -54,7 +54,7 @@ The following environment variables can be configured:
 |----------|---------|-------------|
 | `USE_VALKEY` | `false` | Enable Valkey/Redis caching. Set to `true` to enable |
 | `VALKEY_URL` | `redis://localhost:6379/0` | Redis/Valkey connection URL |
-| `MAX_TEXT_SIZE` | `1048576` | Maximum text size in bytes (1MB default) |
+| `MAX_TEXT_SIZE` | `5` | Maximum text size in MB (5MB default) |
 | `MAX_CONNECTIONS_PER_IP` | `10` | Maximum concurrent connections per IP address |
 | `RETENTION_HOURS` | `48` | How long to retain pads in hours (48 hours default) |
 
