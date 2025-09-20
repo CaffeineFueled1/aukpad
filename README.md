@@ -57,6 +57,7 @@ The following environment variables can be configured:
 | `MAX_TEXT_SIZE` | `5` | Maximum text size in MB (5MB default) |
 | `MAX_CONNECTIONS_PER_IP` | `10` | Maximum concurrent connections per IP address |
 | `RETENTION_HOURS` | `48` | How long to retain pads in hours (48 hours default) |
+| `DESCRIPTION` | `powered by aukpad.com` | Instance description shown on info page |
 
 ### Running
 

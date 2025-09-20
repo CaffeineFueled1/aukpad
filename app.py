@@ -14,6 +14,7 @@ VALKEY_URL = os.getenv("VALKEY_URL", "redis://localhost:6379/0")
 MAX_TEXT_SIZE = int(os.getenv("MAX_TEXT_SIZE", "5")) * 1024 * 1024  # 5MB default
 MAX_CONNECTIONS_PER_IP = int(os.getenv("MAX_CONNECTIONS_PER_IP", "10"))
 RETENTION_HOURS = int(os.getenv("RETENTION_HOURS", "48"))  # Default 48 hours
+DESCRIPTION = os.getenv("DESCRIPTION", "powered by aukpad.com")
 
 # Valkey/Redis client (initialized later if enabled)
 redis_client = None
@@ -128,7 +129,7 @@ HTML = """<!doctype html>
          max-width: 1000px; margin: 0 auto; padding: 1rem; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; }
   header { display:flex; justify-content:space-between; align-items:center; margin-bottom: .5rem; flex-shrink: 0; }
   a,button { padding:.35rem .6rem; text-decoration:none; border:1px solid #ddd; border-radius:8px; background:#fff; }
-  #newpad { background:#000; color:#fff; border:1px solid #000; }
+  #newpad { background:#000; color:#fff; border:1px solid #000; font-weight:bold; }
   #status { font-size:.9rem; opacity:.7; margin-left:.5rem; }
   #status::before { content: "●"; margin-right: .3rem; color: #ef4444; }
   #status.connected::before { color: #22c55e; }
@@ -140,6 +141,7 @@ HTML = """<!doctype html>
   #t { padding:.5rem .75rem; width:100%; height: 100%; resize: none; border:0; outline:0; 
        overflow:auto; white-space: pre; }
   #newpad { margin-left:.5rem; }
+  #info { margin-left:.5rem; color: black; font-size: 0.8rem; }
   pre {margin: 0; }
 </style>
 <header>
@@ -149,6 +151,7 @@ HTML = """<!doctype html>
   <div>
     <button id="copy" onclick="copyToClipboard()">Copy</button>
     <a id="newpad" href="/">New pad</a>
+    <a id="info" href="/system/info">Info</a>
   </div>
 </header>
 <div id="wrap">
@@ -156,6 +159,7 @@ HTML = """<!doctype html>
   <textarea id="t" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
     placeholder="Start typing…"></textarea>
 </div>
+
 <script>
 const $ = s => document.querySelector(s);
 const proto = location.protocol === "https:" ? "wss" : "ws";
@@ -262,6 +266,69 @@ ta.addEventListener("input", () => {
 @app.get("/favicon.ico", include_in_schema=False)
 def favicon():
     return FileResponse("favicon.ico")
+
+@app.get("/system/info", response_class=HTMLResponse)
+def get_system_info():
+    max_text_size_mb = int(os.getenv("MAX_TEXT_SIZE", "5"))
+
+    html_content = f"""<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>aukpad - System Info</title>
+<style>
+  body {{ font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+         max-width: 800px; margin: 2rem auto; padding: 1rem; line-height: 1.6; }}
+  h1, h2 {{ color: #333; }}
+  .info-section {{ background: #f8fafc; padding: 1rem; border-radius: 8px; margin: 1rem 0; }}
+  .config-item {{ margin: 0.5rem 0; }}
+  .value {{ font-family: monospace; background: #e5e7eb; padding: 0.2rem 0.4rem; border-radius: 4px; }}
+  .back-link {{ display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem;
+                background: #000; color: #fff; text-decoration: none; border-radius: 8px; }}
+  .back-link:hover {{ background: #333; }}
+</style>
+</head>
+<body>
+  <h1>System Information</h1>
+
+  <div class="info-section">
+    <h2>Instance</h2>
+    <p>{DESCRIPTION}</p>
+  </div>
+
+  <div class="info-section">
+    <h2>Configuration</h2>
+    <div class="config-item">
+      <strong>Valkey/Redis:</strong> <span class="value">{'Enabled' if USE_VALKEY else 'Disabled'}</span>
+    </div>
+    <div class="config-item">
+      <strong>Max text size:</strong> <span class="value">{max_text_size_mb} MB</span>
+    </div>
+    <div class="config-item">
+      <strong>Max connections per IP:</strong> <span class="value">{MAX_CONNECTIONS_PER_IP}</span>
+    </div>
+    <div class="config-item">
+      <strong>Retention time:</strong> <span class="value">{RETENTION_HOURS} hours</span>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <h2>Open Source</h2>
+    <div class="config-item">
+      <strong>Source Code:</strong> <a href="https://git.uphillsecurity.com/cf7/aukpad" target="_blank" style="color: #0066cc; text-decoration: underline;">https://git.uphillsecurity.com/cf7/aukpad</a>
+    </div>
+    <div class="config-item">
+      <strong>License:</strong> <span class="value">Apache License Version 2.0, January 2004</span>
+    </div>
+    <div class="config-item">
+      <strong>License URL:</strong> <a href="http://www.apache.org/licenses/" target="_blank" style="color: #0066cc; text-decoration: underline;">http://www.apache.org/licenses/</a>
+    </div>
+  </div>
+
+</body>
+</html>"""
+
+    return HTMLResponse(html_content)
 
 @app.get("/", include_in_schema=False)
 def root():
