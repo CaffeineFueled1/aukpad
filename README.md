@@ -2,6 +2,8 @@
 
 Simple **live collaboration notepad** with websockets and FastAPI.
 
+[Issue tracker](https://git.uphillsecurity.com/cf7/aukpad/issues) | `Libera Chat #aukpad` 
+
 - Status: Beta - expect minor changes.
 - Instance/Demo: [aukpad.com](https://aufkpad.com/)
 - Inspired by:
@@ -22,10 +24,7 @@ The goal is to keep it simple! For feature-rich solutions are [hedgedoc](https:/
 - `[pad_id]/raw` HTTP endpoint 
 
 **Ideas**:
-- read-only views
-- password protection
-- E2EE
-- caching/ auto-save to localstorage in browser / offline use
+[Check out the open feature requests](https://git.uphillsecurity.com/cf7/aukpad/issues?q=&type=all&sort=&state=open&labels=12&milestone=0&project=0&assignee=0&poster=0&archived=false)
 
 **Not planned**:
 - accounts / RBAC
@@ -68,6 +67,12 @@ WORK IN PROGRESS
 ## Security
 
 For security concerns or reports, please contact via `hello a t uphillsecurity d o t com` [gpg](https://uphillsecurity.com/gpg).
+
+---
+
+## Notes
+
+- [Github Mirror available](https://github.com/CaffeineFueled1/aukpad)
 
 ---
 
