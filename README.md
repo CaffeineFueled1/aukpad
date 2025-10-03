@@ -15,13 +15,18 @@ The goal is to keep it simple! For feature-rich solutions are [hedgedoc](https:/
 
 ## Features
 
+**Use cases:**
+- shared notepad on multiple machines
+- collaboration on the same notepage with multiple people (notes, config, etc)
+- config changes in aukpad > `curl -o app.conf https://aukpad.com/{pad_id}/raw` > change config in aukpad > repeat `curl` command
+
 **Available**:
 - live collab notepad
 - line numbers
-- custom path for more privacy
+- custom path `{pad_id}` for more privacy
 - optional caching with valkey/redis
 - pad creation with HTTP post requests with curl (see *Usage*)
-- `[pad_id]/raw` HTTP endpoint 
+- `{pad_id}/raw` HTTP endpoint 
 
 **Ideas**:
 [Check out the open feature requests](https://git.uphillsecurity.com/cf7/aukpad/issues?q=&type=all&sort=&state=open&labels=12&milestone=0&project=0&assignee=0&poster=0&archived=false)
@@ -55,7 +60,7 @@ The following environment variables can be configured:
 | `VALKEY_URL` | `redis://localhost:6379/0` | Redis/Valkey connection URL |
 | `MAX_TEXT_SIZE` | `5` | Maximum text size in MB (5MB default) |
 | `MAX_CONNECTIONS_PER_IP` | `10` | Maximum concurrent connections per IP address |
-| `RETENTION_HOURS` | `48` | How long to retain pads in hours (48 hours default) |
+| `RETENTION_HOURS` | `48` | How long to retain pads in hours after last access |
 | `DESCRIPTION` | `powered by aukpad.com` | Instance description shown on info page |
 
 ### Running
