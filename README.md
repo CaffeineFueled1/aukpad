@@ -50,6 +50,57 @@ ip -br a | curl -X POST https://aukpad.com --data-binary @-   # command output
 
 ## Installation
 
+**Please use a reverse proxy and TLS in production!**
+
+### Docker
+
+**Simple / Testing**
+
+`docker run -p 127.0.0.1:8000:8000 git.uphillsecurity.com/cf7/aukpad:latest`
+
+Open `127.0.0.1:8000`
+
+**Adv. example with Podman**
+
+```bash
+# Create Pod
+podman pod create --name aukpad-pod -p 127.0.0.1:8000:8000
+
+# Start Valkey Container (or replace with redis)
+podman run -d --name aukpad-cache \
+    --replace \
+    --pod aukpad-pod \
+    --restart=unless-stopped \
+    docker.io/valkey/valkey:7 \
+    --requirepass xeZNopyIeMMncqDFPHtJQwMwIathgMWo \
+    --maxmemory 2gb \
+    --maxmemory-policy allkeys-lru \
+    --save "" \
+    --appendonly no \
+    --bind 0.0.0.0 \
+    --protected-mode yes
+
+# Start aukpad Container
+podman run -d --name aukpad-app \
+    --replace \
+    --pod aukpad-pod \
+    --read-only \
+    --tmpfs /tmp \
+    --security-opt no-new-privileges:true \
+    --cap-drop ALL \
+    --user 1000:1000 \
+    -e USE_VALKEY=true \
+    -e VALKEY_URL=redis://:xeZNopyIeMMncqDFPHtJQwMwIathgMWo@localhost:6379 \
+    -e MAX_TEXT_SIZE=5 \
+    -e MAX_CONNECTIONS_PER_IP=20 \
+    -e RETENTION_HOURS=72 \
+    git.uphillsecurity.com/cf7/aukpad:latest
+```
+
+*Tested only with Podman - Docker-Compose file might follows.*
+
+Enable support for web sockets in your reverse proxy of choice! - Nginx config example will be added at some point.
+
 ### Environment Variables
 
 The following environment variables can be configured:
@@ -62,10 +113,6 @@ The following environment variables can be configured:
 | `MAX_CONNECTIONS_PER_IP` | `10` | Maximum concurrent connections per IP address |
 | `RETENTION_HOURS` | `48` | How long to retain pads in hours after last access |
 | `DESCRIPTION` | `powered by aukpad.com` | Instance description shown on info page |
-
-### Running
-
-WORK IN PROGRESS
 
 ---
 
