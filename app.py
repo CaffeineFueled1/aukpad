@@ -124,11 +124,11 @@ HTML = """<!doctype html>
 <style>
   :root { --line-h: 1.4; }
   * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; padding: 0; }
+  html, body { height: 100%; margin: 0; padding: 0; background-color: #fbfbfb; }
   body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; 
          max-width: 1000px; margin: 0 auto; padding: 1rem; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; }
   header { display:flex; justify-content:space-between; align-items:center; margin-bottom: .5rem; flex-shrink: 0; }
-  a,button { padding:.35rem .6rem; text-decoration:none; border:1px solid #ddd; border-radius:8px; background:#fff; }
+  a,button { padding:.35rem .6rem; text-decoration:none; border:1px solid #ddd; border-radius:4px; background:#fff; }
   #newpad { background:#000; color:#fff; border:1px solid #000; font-weight:bold; }
   #status { font-size:.9rem; opacity:.7; margin-left:.5rem; }
   #status::before { content: "●"; margin-right: .3rem; color: #ef4444; }
